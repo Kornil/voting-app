@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <% include ./partials/head %>
+  </head>
+  <body>
+    
+    <% include ./partials/nav %>
+
+    <div class="container">
+
+      <% for(var i=polls.length-1; i >= 0; i--) { %>
+        <% if(!user || user.username !== polls[i].user) { %>
+          
+            <div class="thumbnail">
+              <div class="description">
+              <h3><%= polls[i].title %></h3>
+              <h5>Made by <%= polls[i].user %></h5>
+              <ul>
+                <% for (var k = 0; k < polls[i].options.length; k++) { %>
+                <li><form action="/vote/<%= polls[i]._id+'/'+polls[i].options[k].label %>" method="post">
+                  <button class="btn btn-default" ><%= polls[i].options[k].label %></button> <%= polls[i].options[k].value %> </form></li>
+                <% } %>
+                </ul>
+              </div>
+              <div id="chart<%= i %>" class="chartpie">
+                <!-- pie chart here -->
+              </div>
+            </div>
+
+          <% } %>
+        <% } %>
+
+    </div><!-- /.container -->
+    <script>
+    var obj = <%- JSON.stringify(polls) %>;
+    for(var i=obj.length-1;i>=0;i--){
+    var piectx = {
+        width: 200, // width in pixels
+        height: 200, // height in pixels
+        radius: 100, // height in pixels
+        node: '#chart'+i, // id of the element to put the chart in
+        data : obj[i].options
+    }
+    pie = new Piechart(piectx)
+    }
+    </script>
+  </body>
+</html>

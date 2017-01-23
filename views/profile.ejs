@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <% include ./partials/head %>
+  </head>
+  <body>
+    
+    <% include ./partials/nav %>
+
+    <div class="container">
+
+      <div class="center-button">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#pollModal">
+          Add a new Poll!
+        </button>
+      </div>
+      <div class="modal fade" id="pollModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="exampleModalLabel">Create a new pool</h4>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+
+                  <form id="newPoll" action="/profile" method="post">
+                    <div class="input-group">
+                      <label for="title-input">Title</label>
+                      <input class="form-control" type="text" value="" name="title" maxlength="75" placeholder="Poll title" required>
+                    </div>
+                    <div class="input-group">
+                      <label for="options">Options (seperated by commas):</label>
+                      <textarea class="form-control" rows="6" name="options" id="options" required></textarea>
+                    </div>
+                    <button id="submit" class="btn btn-default">Submit</button>
+                  </form>
+
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+
+      <% for(var i=polls.length-1; i >= 0; i--) { %>
+          
+          <div class="thumbnail">
+            <i id="<%= polls[i]._id %>" class="fa fa-times" aria-hidden="true"></i>
+            <div class="description">
+            <h3><%= polls[i].title %></h3>
+            <ul>
+              <% for (var k = 0; k < polls[i].options.length; k++) { %>
+              <li> <%= polls[i].options[k].label +": "+ polls[i].options[k].value %> </li>
+              <% } %>
+              </ul>
+            </div>
+            <div id="chart<%= i %>" class="chartpie">
+              <!-- pie chart here -->
+            </div>
+          </div>
+
+        <% } %>
+
+    </div><!-- /.container -->
+  <script>
+  var obj = <%- JSON.stringify(polls) %>;
+  for(var i=obj.length-1;i>=0;i--){
+  var piectx = {
+      width: 200, // width in pixels
+      height: 200, // height in pixels
+      radius: 100, // height in pixels
+      node: '#chart'+i, // id of the element to put the chart in
+      data : obj[i].options
+  }
+  pie = new Piechart(piectx)
+  }
+
+  $('.fa-times').on('click', function(){
+    var id = $(this).attr('id');
+    $.ajax({
+      url: '/profile/'+id,
+      type: 'DELETE',       
+      complete: function(){
+        window.location.reload(true);
+      }
+    });
+  });
+  </script>
+  </body>
+</html>
