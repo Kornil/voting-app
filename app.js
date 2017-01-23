@@ -9,8 +9,8 @@ var LocalStrategy = require('passport-local').Strategy;
 // global config
 var app = express();
 var PORT = process.env.PORT || 3000;
-var MONGO_DB = process.env.MONGO_DB || oauth.MONGO_DB;
-var BEST_KEPT_SECRET = process.env.BEST_KEPT_SECRET || oauth.BEST_KEPT_SECRET;
+var MONGO_DB = process.env.MONGO_DB;
+var BEST_KEPT_SECRET = process.env.BEST_KEPT_SECRET;
 
 app.use('/assets', express.static(__dirname + '/assets'));
 app.set('views', __dirname + '/views');
