@@ -48,14 +48,14 @@ module.exports = function (app) {
       });
     });
 
-  app.post('/vote/:id/:pos', function(req, res){
+  app.post('/vote/:id/:label', function(req, res){
     if (typeof user !== 'undefined') {
     Poll.findById(req.params.id).exec()
       .then(function(poll){
         if(poll.hasVoted.includes(req.user.username)){
-          res.redirect('/');
+          res.send('hello');
         }else{
-          Poll.update({_id: req.params.id, 'options.label': req.params.pos },  {$inc: { 'options.$.value': 1}, $push: { hasVoted: req.user.username }}).exec()
+          Poll.update({_id: req.params.id, 'options.label': req.params.label },  {$inc: { 'options.$.value': 1}, $push: { hasVoted: req.user.username }}).exec()
             .then(function(poll){
               res.redirect('/');
             });
