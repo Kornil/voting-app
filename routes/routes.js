@@ -58,8 +58,7 @@ module.exports = function (app) {
         if(poll.hasVoted.includes(req.user.username))
           res.redirect('/');
         else
-          Poll.update({_id: req.params.id, 'options.label': req.params.pos },  {$inc: { 'options.$.value': 1} ,
-          $push: { hasVoted: req.user.username }}).exec()
+          Poll.update({_id: req.params.id, 'options.label': req.params.pos },  {$inc: { 'options.$.value': 1}, $push: { hasVoted: req.user.username }}).exec()
             .then(function(poll){
               res.redirect('/');
             })
